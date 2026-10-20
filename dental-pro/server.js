@@ -24,11 +24,10 @@ app.use('/api/appointments', appointmentsRoute);
 app.use('/api/auth', authRoute);
 
 // 1. تشغيل السيرفر أولاً (هذا هو السر لمنع خطأ Timed Out)
+// تأكد أن هذا السطر موجود في الأعلى مع باقي المتغيرات:
+// const PORT = process.env.PORT || 3000;
+
 app.listen(PORT, '0.0.0.0', () => {
     console.log(`🚀 السيرفر يعمل بنجاح على المنفذ: ${PORT}`);
+    console.log(`🌐 تم الربط بالعنوان: 0.0.0.0`);
 });
-
-// 2. الاتصال بقاعدة البيانات MongoDB بعد تشغيل السيرفر
-mongoose.connect(process.env.MONGO_URI)
-  .then(() => console.log('✅ تم الاتصال بقاعدة البيانات بنجاح'))
-  .catch((err) => console.error('❌ فشل الاتصال:', err.message));
