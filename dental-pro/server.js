@@ -6,6 +6,8 @@ const dotenv = require('dotenv');
 dotenv.config();
 
 const app = express();
+// تعريف المنفذ أولاً لضمان عمله على Render
+const PORT = process.env.PORT || 3000;
 
 // إعدادات وسيطة (Middleware)
 app.use(express.json());
@@ -21,13 +23,12 @@ const authRoute = require('./routes/auth');
 app.use('/api/appointments', appointmentsRoute);
 app.use('/api/auth', authRoute);
 
-// الاتصال بقاعدة البيانات MongoDB
+// 1. تشغيل السيرفر أولاً (هذا هو السر لمنع خطأ Timed Out)
+app.listen(PORT, '0.0.0.0', () => {
+    console.log(`🚀 السيرفر يعمل بنجاح على المنفذ: ${PORT}`);
+});
+
+// 2. الاتصال بقاعدة البيانات MongoDB بعد تشغيل السيرفر
 mongoose.connect(process.env.MONGO_URI)
   .then(() => console.log('✅ تم الاتصال بقاعدة البيانات بنجاح'))
   .catch((err) => console.error('❌ فشل الاتصال:', err.message));
-
-// تشغيل السيرفر
-const PORT = process.env.PORT || 3000;
-app.listen(PORT, '0.0.0.0', () => {
-    console.log(`🚀 السيرفر يعمل على المنفذ: ${PORT}`);
-});
